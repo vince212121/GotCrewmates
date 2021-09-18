@@ -18,12 +18,11 @@ export const Login = ({ match }) => {
     e.preventDefault();
     console.log(username,password);
     
-    const response = await Axios.post('localhost:5000/api/session',{username : username, password : password } ,{headers: {"Access-Control-Allow-Origin": "*"}})
-    if (response === 401) {
-      
-    }else if(response === 201){
-      history.push("/");
-    }
+    Axios.post('http://52.170.70.22:5000/api/session',{username : username, password : password }).then((res)=>{
+      history.push("/")
+    }).catch((err)=>{
+      setErrorMessage("Login Failed");
+    });
   };
 
   return (
@@ -36,10 +35,12 @@ export const Login = ({ match }) => {
         className=" object-center bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
         onSubmit={handleSubmit}
       >
-          <input type="text" placeholder="Username" name="username" onChange={({target:{value}})=>setUsername(value)} value={username}/>
-          <input type="password" name="password" onChange={({target:{value}})=>setPassword(value)} value={password}/>
-          {errorMessage}
-          <input type="submit" value="Submit" />
+          <div className="flex flex-col">
+            <input type="text" placeholder="Username" name="username" onChange={({target:{value}})=>setUsername(value)} value={username}/>
+            <input type="password" name="password" onChange={({target:{value}})=>setPassword(value)} value={password}/>
+            {errorMessage}
+            <input type="submit" value="Submit" />
+          </div>
       </form>
       
       <button>Submit</button>
