@@ -9,7 +9,7 @@ const POST_SQL_STATEMENT =
 const DELETE_SQL_STATEMENT =
   //"DELETE FROM gotcrewmates.postings WHERE postID = $1;";
   // "WITH deleted AS (DELETE FROM gotcrewmates.postings WHERE postID = $1 IS TRUE RETURNING *) SELECT count(*) FROM deleted;"
-  "DELETE FROM gotcrewmates.postings WHERE postID = $1 IS TRUE RETURNING *;"
+  "DELETE FROM gotcrewmates.postings WHERE postID = $1 IS TRUE RETURNING *;";
 
 // only of they are logged in, if they are not logged in they will get a 401 for now
 // request.userid is user id
@@ -68,14 +68,12 @@ router.get("/posting", async (req, res) => {
 router.post("/posting", async (req, res) => {
   // gather the data from req
   try {
-    let postCreator;
+    const postCreator = req.userID;
     const { title, postBody } = req.body;
     const numberOfSpots = parseInt(req.body.numberOfSpots);
 
-    if (/^\d+$/.test(req.body.postCreator)) {
-      postCreator = BigInt(req.body.postCreator);
-    } else {
-      res.status(400).send(`Missing ${postCreator && "post creator"}`);
+    if (!postCreator) {
+      console.log("Oh shit something catastrophic happened");
       return;
     }
 
@@ -123,7 +121,6 @@ router.post("/posting", async (req, res) => {
 // deleting post from server
 router.delete("/posting", async (req, res) => {
   try {
-    
     let postID;
 
     if (/^\d+$/.test(req.body.postID)) {
@@ -133,13 +130,12 @@ router.delete("/posting", async (req, res) => {
       return;
     }
 
-
     TransactionWraper((client) => client.query(DELETE_SQL_STATEMENT, [postID]))
       .then((result) => {
         // res.sendStatus(201);
-        console.log("row: " + result.rows.length)
-        console.log("count " + result.rows)
-        console.log("statement: " + DELETE_SQL_STATEMENT + " query: " + postID)
+        console.log("row: " + result.rows.length);
+        console.log("count " + result.rows);
+        console.log("statement: " + DELETE_SQL_STATEMENT + " query: " + postID);
         if (result.rows.length === 1) {
           // res.status(201).send("Post deleted");
           res.status(201).send(result.rows);
