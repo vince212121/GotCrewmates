@@ -4,6 +4,7 @@ const { ACCESS_TOKEN_SECRET } = require("./secrets");
 const OPEN_URLS = {
   "/api/session": ["POST"],
   "/api/user": ["POST", "GET"],
+  "/health": ["GET"],
 };
 
 const JWTAuth = (req, res, next) => {
