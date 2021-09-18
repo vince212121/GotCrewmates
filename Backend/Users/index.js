@@ -23,7 +23,7 @@ router.get("/user", async (req, res) => {
         return;
       } else {
         const userId = result.rows[0].userid;
-        const userData = {};
+        const userData = { username: username, userId: userId };
         const promises = await TransactionWraper((client) => [
           client.query(SELECT_USER_POSTINGS, [userId]).then((result) => {
             userData.postings = result.rows;
