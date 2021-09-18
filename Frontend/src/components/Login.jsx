@@ -22,7 +22,8 @@ const Login = () => {
       }
     )
       .then((res) => {
-        document.cookie = `token=${res.token}; max-age=${res.maxAge / 1000}`;
+        console.log(res);
+        document.cookie = `token=${res.data.token}; max-age=${res.data.maxAge / 1000}`;
         history.push("/");
       })
       .catch((err) => {

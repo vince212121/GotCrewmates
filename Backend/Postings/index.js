@@ -25,9 +25,9 @@ router.get("/posting", async (req, res) => {
     let additionalStatement = "";
     let queryParamenter = [];
 
-    if (req.body.postID) {
-      if (/^\d+$/.test(req.body.postID)) {
-        postID = BigInt(req.body.postID);
+    if (req.query.postID) {
+      if (/^\d+$/.test(req.query.postID)) {
+        postID = BigInt(req.query.postID);
         additionalStatement += " WHERE postID = $1";
         queryParamenter = [postID];
       } else {
@@ -35,7 +35,7 @@ router.get("/posting", async (req, res) => {
         return;
       }
     } else {
-      pageNumber = parseInt(req.body.pageNumber);
+      pageNumber = parseInt(req.query.pageNumber);
       if (isNaN(pageNumber) || pageNumber <= 0) {
         res.status(400).send(`Invalid page number`);
         return;

@@ -2,6 +2,7 @@ import Axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { BASE_URL } from "../Constants";
+import Cookies from "js-cookie";
 
 const Posting = () => {
   const { id } = useParams();
@@ -10,10 +11,17 @@ const Posting = () => {
 
   useEffect(() => {
     setLoading(true);
-    Axios.get(BASE_URL + "/api/posting").then((data) => {
-      setPostingData(data);
-      setLoading(false);
-    });
+    const token = Cookies.get("token");
+    if (token) {
+      Axios.get(BASE_URL + "/api/posting", {
+        params: { postID: id },
+        headers: { Authorization: `Bearer ${token}` },
+      }).then((data) => {
+        setPostingData(data);
+        setLoading(false);
+      });
+    } else {
+    }
   }, [id]);
 
   const [loading, setLoading] = useState(true);
