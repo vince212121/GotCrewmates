@@ -105,4 +105,5 @@ dist
 package-lock.json
 
 cockroach-data/
+cockroach-v21.1.7.linux-amd64/
 Backend/Auth/secrets.js
