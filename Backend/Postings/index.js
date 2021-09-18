@@ -1,5 +1,6 @@
 const express = require("express");
 const { TransactionWraper } = require("../DatabaseUtil");
+const { FindUsername } = require("./util");
 // const { GetPosts } = require("./util");
 const router = express.Router();
 
@@ -58,9 +59,9 @@ router.get("/posting", async (req, res) => {
       client.query(postingsSqlStatement + additionalStatement + ";", queryParamenter)
     )
       .then((result) => {
-        if (!postID || result.rows.length > 0)
+        if (!postID || result.rows.length > 0) {
           res.status(200).send(result.rows);
-        else res.sendStatus(400);
+        } else res.sendStatus(400);
       })
       .catch((e) => {
         res.sendStatus(500);
@@ -75,14 +76,12 @@ router.get("/posting", async (req, res) => {
 router.post("/posting", async (req, res) => {
   // gather the data from req
   try {
-    let postCreator;
-    const { title, postBody, tags } = req.body;
+    const postCreator = req.userID;
+    const { title, postBody } = req.body;
     const numberOfSpots = parseInt(req.body.numberOfSpots);
 
-    if (/^\d+$/.test(req.body.postCreator)) {
-      postCreator = BigInt(req.body.postCreator);
-    } else {
-      res.status(400).send(`Missing ${postCreator && "post creator"}`);
+    if (!postCreator) {
+      console.log("Oh shit something catastrophic happened");
       return;
     }
 
@@ -98,11 +97,6 @@ router.post("/posting", async (req, res) => {
 
     if (isNaN(numberOfSpots) || numberOfSpots <= 0) {
       res.status(400).send(`Invalid number of spots`);
-      return;
-    }
-
-    if (!tags) {
-      res.status(400).send(`Invalid Tag(s)`);
       return;
     }
 
@@ -144,7 +138,6 @@ router.post("/posting", async (req, res) => {
 // deleting post from server
 router.delete("/posting", async (req, res) => {
   try {
-    
     let postID;
     let tagIDs = [];
 
