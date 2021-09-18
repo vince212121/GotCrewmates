@@ -21,7 +21,7 @@ router.post("/user", async (req, res) => {
     if (!username || !password) {
       res
         .status(400)
-        .send(`Missing ${username && "username"} ${password && "passowrd"}`);
+        .send(`Missing ${username && "username"} ${password && "password"}`);
       return;
     }
     const hash = HashPassword(password);
