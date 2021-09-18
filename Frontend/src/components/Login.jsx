@@ -1,32 +1,39 @@
-import { Link, useHistory } from "react-router-dom";
-import { useState } from "react";
+import { Link, useHistory, useLocation } from "react-router-dom";
+import { useState, useMemo } from "react";
 import Axios from "axios";
 import { BASE_URL } from "../Constants";
+import Cookies from "js-cookie";
 
 const Login = () => {
+  const { search } = useLocation();
   const history = useHistory();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const redirect = useMemo(() => {
+    const params = new URLSearchParams(search);
+    return params.get("redirect");
+  }, [search]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(username, password);
-
-    Axios.post(
-      BASE_URL + "/api/session",
-      {
-        username: username,
-        password: password,
-      }
-    )
+    Axios.post(BASE_URL + "/api/session", {
+      username: username,
+      password: password,
+    })
       .then((res) => {
-        console.log(res);
-        document.cookie = `token=${res.data.token}; max-age=${res.data.maxAge / 1000}`;
-        history.push("/");
+        const expireDate = new Date(
+          new Date().getTime() + parseInt(res.data.maxAge)
+        );
+        Cookies.remove("token");
+        Cookies.set("token", res.data.token, { expires: expireDate });
+        if (redirect) history.push(redirect);
+        else history.push("/");
       })
       .catch((err) => {
+        console.log(err);
         setErrorMessage("Login Failed");
       });
   };
@@ -59,8 +66,6 @@ const Login = () => {
           <input type="submit" value="Submit" />
         </div>
       </form>
-
-      <button>Submit</button>
     </div>
   );
 };
