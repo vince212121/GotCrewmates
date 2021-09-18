@@ -36,7 +36,7 @@ const Header = () => {
       <header className="w-full flex flex-row bg-lightlightblue p-4 sticky">
         <Link
           to="/"
-          className="bg-header text-3xl font-bold pl-2 flex flex-row w-1/4"
+          className="bg-header text-3xl font-bold pl-2 flex flex-row"
         >
           <img src="/favicon-32x32.png" alt="Pepe" />
           Got Crew Mates?
