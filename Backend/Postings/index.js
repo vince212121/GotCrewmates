@@ -51,11 +51,7 @@ router.get("/posting", async (req, res) => {
     )
       .then(async (result) => {
         if (!postID || result.rows.length === 1) {
-          // Supplement result with posterCreator username
-          const userNameData = await TransactionWraper((client) =>
-            result.rows.map((row) => FindUsername(client, row))
-          );
-          res.status(200).send(await Promise.all(userNameData));
+          res.status(200).send(result.rows);
         } else res.sendStatus(400);
       })
       .catch((e) => {
