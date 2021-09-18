@@ -60,7 +60,7 @@ router.post("/session", async (req, res) => {
     }
     const row = await GetUserRow(username);
     if(!row){
-      res.status(401);
+      res.sendStatus(401);
       return;
     }
     const { hash, userid: userID } = row;
