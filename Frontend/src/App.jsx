@@ -5,6 +5,7 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Posting from "./components/Posting";
+import Header from "./components/header";
 
 /*
     Components to make:
@@ -20,12 +21,13 @@ import Posting from "./components/Posting";
 export default function App() {
   return (
     <BrowserRouter>
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="/posting/:id" component={Posting} />
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={Signup} />
-      </Switch>
+        <Header />
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/posting/:id" component={Posting} />
+          <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
+        </Switch>
     </BrowserRouter>
   );
 }
