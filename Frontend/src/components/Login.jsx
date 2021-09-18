@@ -19,13 +19,10 @@ const Login = () => {
       {
         username: username,
         password: password,
-      },
-      {
-        withCredentials: true,
       }
     )
       .then((res) => {
-        document.cookie = `token=${res}; max-age=`;
+        document.cookie = `token=${res.token}; max-age=${res.maxAge / 1000}`;
         history.push("/");
       })
       .catch((err) => {

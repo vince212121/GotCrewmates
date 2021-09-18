@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 5000;
 const main = () => {
   const apiLayer = express();
   // Allow cross-origin-resouce-sharing
-  apiLayer.use(cors({ credentials: true }));
+  apiLayer.use(cors());
   // Data will be JSON
   apiLayer.use(express.json());
   // Something for parsing cookies

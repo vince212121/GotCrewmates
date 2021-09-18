@@ -73,11 +73,7 @@ router.post("/session", async (req, res) => {
         httpOnly: true,
         sameSite: "strict",
       });
-      res.cookie("authToken", accessToken, {
-        maxAge: ACCESS_EXPIRES_IN,
-        sameSite: "strict",
-      });
-      res.status(201).send(accessToken);
+      res.status(201).send({ token: accessToken, maxAge: ACCESS_EXPIRES_IN });
     } else {
       res.sendStatus(401);
     }
