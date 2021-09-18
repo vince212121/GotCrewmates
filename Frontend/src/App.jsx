@@ -2,7 +2,8 @@ import React, { Suspense } from "react";
 import { Switch, Route, BrowserRouter, useParams } from "react-router-dom";
 
 import { Home } from "./Home";
-import { Login } from "./Login";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
 import { Catalogue } from "./Catalogue";
 import { PostDetail } from "./PostDetail";
 
