@@ -1,10 +1,8 @@
 const express = require("express");
 const { TransactionWraper } = require("../DatabaseUtil");
-const { FindUsername } = require("./util");
-// const { GetPosts } = require("./util");
 const router = express.Router();
 
-// const POSTID_GET_SQL_STATEMENT = 
+// const POSTID_GET_SQL_STATEMENT =
 //   "SELECT postID from gotcrewmates.postings;";
 // const POSTINGTAG_POST_SQL_STATEMENT =
 //  "INSERT INTO gotcrewmates.postingtags (postID, tagID) VALUES ($1, $2);";
@@ -12,13 +10,12 @@ const router = express.Router();
 const POST_SQL_STATEMENT =
   "INSERT INTO gotcrewmates.postings (postCreator, title, postBody, numberOfSpots) VALUES ($1, $2, $3, $4);";
 
-
 const POSTING_TAG_POST_SQL_STATEMENT =
   "INSERT INTO gotcrewmates.postingtags (postID, tagID) VALUES (SELECT postID FROM gotcrewmates.postings WHERE postCreator = $1 AND title,$1);";
 
 const DELETE_SQL_STATEMENT =
   // "DELETE FROM gotcrewmates.postings WHERE postID = $1;";
-  "DELETE FROM gotcrewmates.postings WHERE postID = $1;";
+  "DELETE FROM gotcrewmates.postings WHERE postID = $1 AND userID = $2;";
 
 // only of they are logged in, if they are not logged in they will get a 401 for now
 // request.userid is user id
@@ -29,7 +26,9 @@ router.get("/posting", async (req, res) => {
   try {
     let postID;
     let pageNumber;
-    let postingsSqlStatement = "SELECT u.username, p.title, p.postbody, p.status, p.numberofspots, t.tagname, p.postid, p.datecreated FROM gotcrewmates.tags t JOIN gotcrewmates.postingtags pt ON t.tagid = pt.tagid JOIN gotcrewmates.postings p ON p.postid = pt.postid JOIN gotcrewmates.users u ON p.postcreator = u.userid";
+    let postingsSqlStatement =
+      // "SELECT u.username, p.title, p.postbody, p.status, p.numberofspots, t.tagname, p.postid, p.datecreated FROM gotcrewmates.tags t JOIN gotcrewmates.postingtags pt ON t.tagid = pt.tagid JOIN gotcrewmates.postings p ON p.postid = pt.postid JOIN gotcrewmates.users u ON p.postcreator = u.userid";
+      "SELECT u.username, p.title, p.postbody, p.status, p.numberofspots, t.tagname, p.postid, p.datecreated FROM gotcrewmates.tags t FULL OUTER JOIN gotcrewmates.postingtags pt ON t.tagid = pt.tagid FULL OUTER JOIN gotcrewmates.postings p ON p.postid = pt.postid JOIN gotcrewmates.users u ON p.postcreator = u.userid";
 
     let additionalStatement = "";
     let queryParamenter = [];
@@ -39,7 +38,7 @@ router.get("/posting", async (req, res) => {
         postID = BigInt(req.query.postID);
         additionalStatement += " WHERE p.postID = $1";
         queryParamenter = [postID];
-        console.log(queryParamenter)
+        console.log(queryParamenter);
       } else {
         res.status(400).send(`Invalid postID`);
         return;
@@ -56,7 +55,10 @@ router.get("/posting", async (req, res) => {
     }
 
     TransactionWraper((client) =>
-      client.query(postingsSqlStatement + additionalStatement + ";", queryParamenter)
+      client.query(
+        postingsSqlStatement + additionalStatement + ";",
+        queryParamenter
+      )
     )
       .then((result) => {
         if (!postID || result.rows.length > 0) {
@@ -71,17 +73,26 @@ router.get("/posting", async (req, res) => {
   }
 });
 
+//****  Need to fix error with invalid user id giving an UnhandledPromiseRejectionWarning
+/*
+TODO: 
+  - When the tag id array is passed in, it needs to run the insert in the postingTags table 
+  - Once the post is created, we need to access the postID then add the tagIDs to the postTags table
+  - Change from body to query for GET requests
 
+  Not my problem (this is when you click on join)
+  - Then need to add it to the groups table with the post id and member id
+ */
 // Posting data to server
 router.post("/posting", async (req, res) => {
   // gather the data from req
   try {
-    const postCreator = req.userID;
-    const { title, postBody } = req.body;
+    let postCreator = req.userID;
+    const { title, postBody, tags } = req.body;
     const numberOfSpots = parseInt(req.body.numberOfSpots);
 
     if (!postCreator) {
-      console.log("Oh shit something catastrophic happened");
+      res.status(500).send(`INTERNAL SERVER ERROR: Missing post creator`);
       return;
     }
 
@@ -105,7 +116,7 @@ router.post("/posting", async (req, res) => {
         postCreator,
         title,
         postBody,
-        numberOfSpots
+        numberOfSpots,
       ])
     )
       .then((result) => {
@@ -114,11 +125,9 @@ router.post("/posting", async (req, res) => {
           // let postID = TransactionWraper((client) => client.query(POSTID_GET_SQL_STATEMENT)).then((result) => {
           // })
           // TransactionWraper((client) => client.query(POSTINGTAG_POST_SQL_STATEMENT, [postID.result, ]))
-          
         } else {
           res.sendStatus(400);
         }
-
       })
       .catch((e) => {
         // Catch invalid user
@@ -135,12 +144,17 @@ router.post("/posting", async (req, res) => {
   }
 });
 
+// using cascade delete
 // deleting post from server
 router.delete("/posting", async (req, res) => {
   try {
     let postID;
-    let tagIDs = [];
-
+    let userID = req.userID;
+    
+    if (!userID) {
+      res.status(500).send(`INTERNAL SERVER ERROR: Missing User ID`);
+      return;
+    }
 
     if (/^\d+$/.test(req.body.postID)) {
       postID = BigInt(req.body.postID);
@@ -149,15 +163,7 @@ router.delete("/posting", async (req, res) => {
       return;
     }
 
-    if (req.body.tagIDs) {
-      tagIDs = req.body.tagIDs;
-    } else {
-      res.status(400).send(`Invalid TagID(s)`);
-      return;
-    }
-
-
-    TransactionWraper((client) => client.query(DELETE_SQL_STATEMENT, [postID]))
+    TransactionWraper((client) => client.query(DELETE_SQL_STATEMENT, [postID, userID]))
       .then((result) => {
         if (result.rowCount === 1) {
           res.status(201).send("Post deleted");

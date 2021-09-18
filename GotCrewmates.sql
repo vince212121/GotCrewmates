@@ -28,7 +28,8 @@ CREATE TABLE Postings (
 	Title VARCHAR(50) NOT NULL,
 	PostBody VARCHAR(1000) NOT NULL,
 	NumberOfSpots INT NOT NULL,
-	Status INT DEFAULT 1 NOT NULL CONSTRAINT FK_Postings_PostStatus_Status REFERENCES PostStatus(StatusID)
+	Status INT DEFAULT 1 NOT NULL CONSTRAINT FK_Postings_PostStatus_Status REFERENCES PostStatus(StatusID),
+	DateCreated TIMESTAMPTZ DEFAULT NOW()
 );
 
 DROP TABLE IF EXISTS Tags;
