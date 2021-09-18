@@ -8,18 +8,20 @@ const JOIN_POSTING_SQL_STATEMENT =
 
 router.get("/user", async (req, res) => {
   try {
-    const { username } = req.body;
+    const { username } = req.query;
     TransactionWraper((client) =>
-    client.query(JOIN_POSTING_SQL_STATEMENT, [username])
+      client.query(JOIN_POSTING_SQL_STATEMENT, [username])
     )
       .then((result) => {
-        console.log("query: " + JOIN_POSTING_SQL_STATEMENT)
-        console.log("param: " + username)
-        console.log(result.rows.length)
-        if (result.rows.length > 0)
-          res.status(200).send(result.rows);
-        
-        else res.status(400).send("User has no postings or doesn't exist (this should not happen [only first one])");
+        if (result.rows.length === 1) res.status(200).send(result.rows[0]);
+        else if (result.rows.legnth > 1)
+          res.status(500).send("Multiple users found");
+        else
+          res
+            .status(400)
+            .send(
+              "User has no postings or doesn't exist (this should not happen [only first one])"
+            );
       })
       .catch((e) => {
         console.error(e);
@@ -29,6 +31,5 @@ router.get("/user", async (req, res) => {
     console.error(error);
     res.sendStatus(500);
   }
-
 });
 module.exports = router;
