@@ -1,4 +1,4 @@
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { useState, useMemo } from "react";
 import Axios from "axios";
 import { BASE_URL } from "../Constants";
@@ -40,9 +40,6 @@ const Login = () => {
 
   return (
     <div className="w-full items-center bg-gray-400">
-      <Link to="/">
-        <button>Go Home</button>
-      </Link>
       <h1 className="text-4xl">This is the Log in page.</h1>
       <form
         className=" object-center bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
@@ -51,13 +48,14 @@ const Login = () => {
         <div className="flex flex-col">
           <input
             type="text"
-            placeholder="Username"
+            placeholder="username"
             name="username"
             onChange={({ target: { value } }) => setUsername(value)}
             value={username}
           />
           <input
             type="password"
+            placeholder="password"
             name="password"
             onChange={({ target: { value } }) => setPassword(value)}
             value={password}
