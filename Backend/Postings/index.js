@@ -7,9 +7,7 @@ const POST_SQL_STATEMENT =
   "INSERT INTO gotcrewmates.postings (postCreator, title, postBody, numberOfSpots) VALUES ($1, $2, $3, $4);";
 
 const DELETE_SQL_STATEMENT =
-  //"DELETE FROM gotcrewmates.postings WHERE postID = $1;";
-  // "WITH deleted AS (DELETE FROM gotcrewmates.postings WHERE postID = $1 IS TRUE RETURNING *) SELECT count(*) FROM deleted;"
-  "DELETE FROM gotcrewmates.postings WHERE postID = $1 IS TRUE RETURNING *;"
+  "DELETE FROM gotcrewmates.postings WHERE postID = $1;";
 
 // only of they are logged in, if they are not logged in they will get a 401 for now
 // request.userid is user id
@@ -102,8 +100,13 @@ router.post("/posting", async (req, res) => {
         numberOfSpots,
       ])
     )
-      .then(() => {
-        res.sendStatus(201);
+      .then((result) => {
+        if (result.rowCount == 1) {
+          res.sendStatus(201);
+        } else {
+          res.sendStatus(400);
+        }
+
       })
       .catch((e) => {
         // Catch invalid user
@@ -136,13 +139,8 @@ router.delete("/posting", async (req, res) => {
 
     TransactionWraper((client) => client.query(DELETE_SQL_STATEMENT, [postID]))
       .then((result) => {
-        // res.sendStatus(201);
-        console.log("row: " + result.rows.length)
-        console.log("count " + result.rows)
-        console.log("statement: " + DELETE_SQL_STATEMENT + " query: " + postID)
-        if (result.rows.length === 1) {
-          // res.status(201).send("Post deleted");
-          res.status(201).send(result.rows);
+        if (result.rowCount === 1) {
+          res.status(201).send("Post deleted");
         } else {
           res.status(400).send("Invalid post");
           return;
