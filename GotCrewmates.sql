@@ -54,3 +54,33 @@ CREATE TABLE PostingTags (
     CONSTRAINT FK_PostingTags_Postings_Post FOREIGN KEY (TagID) REFERENCES Tags(TagID),
     CONSTRAINT FK_PostingTags_Tags_Tag FOREIGN KEY (PostID) REFERENCES Postings(PostID)
 );
+
+INSERT INTO gotcrewmates.tags (tagname) VALUES 
+('Music'),
+('Photographing'),
+('Art'),
+('Cocktail'),
+('DIY'),
+('Woodworking'),
+('Video Games'),
+('Exercising'),
+('Outdoors'),
+('Karaoke'),
+('Anime'),
+('Movies'),
+('Comics'),
+('Travel'),
+('Meditation'),
+('Cars'),
+('Gardening'),
+('Programming'),
+('Computer Hardware'),
+('Hiking'),
+('Swimming'),
+('Camping'),
+('Dancing'),
+('Cooking'),
+('Sports');
+
+INSERT INTO gotcrewmates.users (username, hash) VALUES
+('testuser', '$2b$10$sH3RDV2eD1EsB4STYXDx3.ZYA6ReKKQpU4qdHDI2pws5Srr8OzlOC');
