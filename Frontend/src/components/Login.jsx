@@ -14,11 +14,16 @@ const Login = () => {
     e.preventDefault();
     console.log(username, password);
 
-    Axios.post(BASE_URL + "/api/session", {
-      username: username,
-      password: password,
-    })
+    Axios.post(
+      BASE_URL + "/api/session",
+      {
+        username: username,
+        password: password,
+      }
+    )
       .then((res) => {
+        console.log(res);
+        document.cookie = `token=${res.data.token}; max-age=${res.data.maxAge / 1000}`;
         history.push("/");
       })
       .catch((err) => {

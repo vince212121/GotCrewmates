@@ -1,5 +1,6 @@
 const express = require("express");
 const { TransactionWraper } = require("../DatabaseUtil");
+const { FindUsername } = require("./util");
 // const { GetPosts } = require("./util");
 const router = express.Router();
 
@@ -23,9 +24,9 @@ router.get("/posting", async (req, res) => {
     let additionalStatement = "";
     let queryParamenter = [];
 
-    if (req.body.postID) {
-      if (/^\d+$/.test(req.body.postID)) {
-        postID = BigInt(req.body.postID);
+    if (req.query.postID) {
+      if (/^\d+$/.test(req.query.postID)) {
+        postID = BigInt(req.query.postID);
         additionalStatement += " WHERE postID = $1";
         queryParamenter = [postID];
       } else {
@@ -33,7 +34,7 @@ router.get("/posting", async (req, res) => {
         return;
       }
     } else {
-      pageNumber = parseInt(req.body.pageNumber);
+      pageNumber = parseInt(req.query.pageNumber);
       if (isNaN(pageNumber) || pageNumber <= 0) {
         res.status(400).send(`Invalid page number`);
         return;
@@ -46,10 +47,10 @@ router.get("/posting", async (req, res) => {
     TransactionWraper((client) =>
       client.query(getSqlStatement + additionalStatement + ";", queryParamenter)
     )
-      .then((result) => {
-        if (!postID || result.rows.length === 1)
+      .then(async (result) => {
+        if (!postID || result.rows.length === 1) {
           res.status(200).send(result.rows);
-        else res.sendStatus(400);
+        } else res.sendStatus(400);
       })
       .catch((e) => {
         console.error(e);
@@ -66,14 +67,12 @@ router.get("/posting", async (req, res) => {
 router.post("/posting", async (req, res) => {
   // gather the data from req
   try {
-    let postCreator;
+    const postCreator = req.userID;
     const { title, postBody } = req.body;
     const numberOfSpots = parseInt(req.body.numberOfSpots);
 
-    if (/^\d+$/.test(req.body.postCreator)) {
-      postCreator = BigInt(req.body.postCreator);
-    } else {
-      res.status(400).send(`Missing ${postCreator && "post creator"}`);
+    if (!postCreator) {
+      console.log("Oh shit something catastrophic happened");
       return;
     }
 
@@ -126,7 +125,6 @@ router.post("/posting", async (req, res) => {
 // deleting post from server
 router.delete("/posting", async (req, res) => {
   try {
-    
     let postID;
 
     if (/^\d+$/.test(req.body.postID)) {
@@ -135,7 +133,6 @@ router.delete("/posting", async (req, res) => {
       res.status(400).send(`Invalid PostID`);
       return;
     }
-
 
     TransactionWraper((client) => client.query(DELETE_SQL_STATEMENT, [postID]))
       .then((result) => {
