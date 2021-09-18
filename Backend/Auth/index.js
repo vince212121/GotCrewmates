@@ -13,7 +13,7 @@ const POST_SQL_STATEMENT =
   "INSERT INTO gotcrewmates.users (username, hash) VALUES ($1, $2)";
 
 // Create a new user
-router.post("/newuser", async (req, res) => {
+router.post("/user", async (req, res) => {
   // Gether data from req
   try {
     const { username, password } = req.body;

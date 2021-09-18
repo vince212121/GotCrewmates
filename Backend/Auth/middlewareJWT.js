@@ -16,7 +16,7 @@ const JWTAuth = (req, res, next) => {
         next();
         return;
       }
-      return res.status(400).send({ payload: "Bad request", success: false });
+      return res.status(401).send({ payload: "Bad request", success: false });
     }
     jwt.verify(accessToken, ACCESS_TOKEN_SECRET, (err, decoded) => {
       if (err) throw err;
@@ -26,7 +26,7 @@ const JWTAuth = (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(401);
+    res.status(500);
   }
 };
 
