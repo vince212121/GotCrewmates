@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Posting from "./components/Posting";
 import Header from "./components/header";
+import User from "./components/User";
 
 /*
     Components to make:
@@ -29,6 +30,7 @@ export default function App() {
             <Route path="/posting/:id" component={Posting} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
+            <Route path="/user/:username" component={User} />
           </Switch>
         </div>
       </div>

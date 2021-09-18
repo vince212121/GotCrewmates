@@ -3,12 +3,14 @@ import { useState, useEffect } from "react";
 import { useParams, useHistory, useLocation } from "react-router-dom";
 import { BASE_URL } from "../Constants";
 import Cookies from "js-cookie";
+import Loading from "./Loading";
 
 const Posting = () => {
   const history = useHistory();
   const location = useLocation();
   const { id } = useParams();
 
+  const [loading, setLoading] = useState(true);
   const [postingData, setPostingData] = useState({});
 
   useEffect(() => {
@@ -32,15 +34,19 @@ const Posting = () => {
     }
   }, [id, history, location.pathname]);
 
-  const [loading, setLoading] = useState(true);
+  
   return (
     <>
       {loading ? (
-        <h1>Loading...</h1>
+        <Loading />
       ) : (
         <>
-          <h1 className="text-4xl text-white mb-4 border-b-2">{postingData.title}</h1>
-          <div className="text-white border border-black rounded-xl p-4">{postingData.postbody}</div>
+          <h1 className="text-4xl text-white mb-4 border-b-2">
+            {postingData.title}
+          </h1>
+          <div className="text-white border border-black rounded-xl p-4">
+            {postingData.postbody}
+          </div>
           <div>{postingData.creator}</div>
           <div>{postingData.numberofspots}</div>
         </>
