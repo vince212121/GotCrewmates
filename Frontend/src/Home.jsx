@@ -6,7 +6,7 @@ export const Home = ({ match }) => {
       Home Component
       <ul>
         <li>
-          <Link to="/Login"> Login</Link>
+          <Link to="/login"> Login</Link>
         </li>
         <li>
           <Link to="/PostDetail">PostDetail</Link>
