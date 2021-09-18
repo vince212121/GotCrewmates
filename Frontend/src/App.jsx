@@ -21,13 +21,17 @@ import Header from "./components/header";
 export default function App() {
   return (
     <BrowserRouter>
-        <Header />
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/posting/:id" component={Posting} />
-          <Route path="/login" component={Login} />
-          <Route path="/signup" component={Signup} />
-        </Switch>
+      <Header />
+      <div className="flex w-full justify-center">
+        <div className="w-1/2 p-4">
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/posting/:id" component={Posting} />
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
+          </Switch>
+        </div>
+      </div>
     </BrowserRouter>
   );
 }
