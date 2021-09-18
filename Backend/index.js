@@ -3,7 +3,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 
 // Custom middleware
-const JWTAuth = require("./Auth/middlewareJWT")
+const JWTAuth = require("./Auth/middlewareJWT");
 // Custom routers
 const authRouter = require("./Auth");
 const postRouter = require("./Postings");
@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 5000;
 const main = () => {
   const apiLayer = express();
   // Allow cross-origin-resouce-sharing
-  apiLayer.use(cors());
+  apiLayer.use(cors({ credentials: true }));
   // Data will be JSON
   apiLayer.use(express.json());
   // Something for parsing cookies

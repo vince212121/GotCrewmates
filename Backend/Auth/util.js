@@ -44,4 +44,4 @@ const CreateJWTs = (userID, username) => {
   return [accessToken,refreshToken];
 };
 
-module.exports = { GetUserRow, HashPassword, ComparePassword, CreateJWTs };
+module.exports = { GetUserRow, HashPassword, ComparePassword, CreateJWTs, ACCESS_EXPIRES_IN };
