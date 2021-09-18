@@ -5,6 +5,7 @@ const {
   GetUserRow,
   ComparePassword,
   CreateJWTs,
+  ACCESS_EXPIRES_IN,
 } = require("./util");
 
 const router = express.Router();
@@ -37,6 +38,7 @@ router.post("/user", async (req, res) => {
           res.status(400).send("Username already exists");
           return;
         }
+        console.log(e.code);
         console.error(e);
         res.sendStatus(500);
       });
@@ -59,7 +61,7 @@ router.post("/session", async (req, res) => {
       return;
     }
     const row = await GetUserRow(username);
-    if(!row){
+    if (!row) {
       res.sendStatus(401);
       return;
     }
@@ -71,7 +73,7 @@ router.post("/session", async (req, res) => {
         httpOnly: true,
         sameSite: "strict",
       });
-      res.status(201).send(accessToken);
+      res.status(201).send({ token: accessToken, maxAge: ACCESS_EXPIRES_IN });
     } else {
       res.sendStatus(401);
     }

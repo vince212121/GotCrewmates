@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = require("./secrets");
 
 const SALT_ROUNDS = 10;
-const ACCESS_EXPIRES_IN = "90000";
+const ACCESS_EXPIRES_IN = "9000000";
 const REFRESH_EXPIRES_IN = "5184000000";
 
 const GetUserRow = async (username) => {
@@ -44,4 +44,4 @@ const CreateJWTs = (userID, username) => {
   return [accessToken,refreshToken];
 };
 
-module.exports = { GetUserRow, HashPassword, ComparePassword, CreateJWTs };
+module.exports = { GetUserRow, HashPassword, ComparePassword, CreateJWTs, ACCESS_EXPIRES_IN };
