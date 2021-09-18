@@ -5,7 +5,8 @@ const cookieParser = require("cookie-parser");
 // Custom middleware
 const JWTAuth = require("./Auth/middlewareJWT")
 // Custom routers
-const authRouter = require("./Auth");
+// const authRouter = require("./Auth");
+const postRouter = require("./Postings");
 
 const PORT = process.env.PORT || 5000;
 
@@ -22,7 +23,8 @@ const main = () => {
 
   // Health endpoint
   apiLayer.get("/health", (req, res) => res.sendStatus(200));
-  apiLayer.use("/api", authRouter);
+  // apiLayer.use("/api", authRouter);
+  apiLayer.use("/api", postRouter);
 
   apiLayer.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 };
