@@ -1,5 +1,6 @@
 const express = require("express");
 const { TransactionWraper } = require("../DatabaseUtil");
+const { FindUsername } = require("./util");
 // const { GetPosts } = require("./util");
 const router = express.Router();
 
@@ -48,10 +49,14 @@ router.get("/posting", async (req, res) => {
     TransactionWraper((client) =>
       client.query(getSqlStatement + additionalStatement + ";", queryParamenter)
     )
-      .then((result) => {
-        if (!postID || result.rows.length === 1)
-          res.status(200).send(result.rows);
-        else res.sendStatus(400);
+      .then(async (result) => {
+        if (!postID || result.rows.length === 1) {
+          // Supplement result with posterCreator username
+          const userNameData = await TransactionWraper((client) =>
+            result.rows.map((row) => FindUsername(client, row))
+          );
+          res.status(200).send(await Promise.all(userNameData));
+        } else res.sendStatus(400);
       })
       .catch((e) => {
         console.error(e);

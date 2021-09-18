@@ -17,7 +17,7 @@ const Posting = () => {
         params: { postID: id },
         headers: { Authorization: `Bearer ${token}` },
       }).then((data) => {
-        setPostingData(data);
+        setPostingData(data.data[0]);
         setLoading(false);
       });
     } else {
@@ -32,9 +32,9 @@ const Posting = () => {
       ) : (
         <>
           <h1>{postingData.title}</h1>
-          <div>{postingData.body}</div>
-          <div>{postingData.user}</div>
-          <div>{postingData.numberOfSpots}</div>
+          <div>{postingData.postbody}</div>
+          <div>{postingData.creator}</div>
+          <div>{postingData.numberofspots}</div>
         </>
       )}
     </>

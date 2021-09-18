@@ -16,7 +16,7 @@ const JWTAuth = (req, res, next) => {
         next();
         return;
       }
-      return res.status(401).send({ payload: "Bad request", success: false });
+      return res.status(401).send({ payload: "Missing auth token", success: false });
     }
     jwt.verify(accessToken, ACCESS_TOKEN_SECRET, (err, decoded) => {
       if (err){
