@@ -18,16 +18,19 @@ router.get("/posting", async (req, res) => {
   try {
     let postID;
     let pageNumber;
-    let getSqlStatement = "SELECT * FROM gotcrewmates.postings";
-
+    // let postingsSqlStatement = "SELECT * FROM gotcrewmates.postings";
+    let postingsSqlStatement = "SELECT u.username, p.title, p.postbody, p.status, p.numberofspots, t.tagname, p.postid FROM gotcrewmates.tags t JOIN gotcrewmates.postingtags pt ON t.tagid = pt.tagid JOIN gotcrewmates.postings p ON p.postid = pt.postid JOIN gotcrewmates.users u ON p.postcreator = u.userid";
+    
     let additionalStatement = "";
     let queryParamenter = [];
-
+    // 694325875459948545 postid
+    // 694310865484709889 tag id
     if (req.body.postID) {
       if (/^\d+$/.test(req.body.postID)) {
         postID = BigInt(req.body.postID);
-        additionalStatement += " WHERE postID = $1";
+        additionalStatement += " WHERE p.postID = $1";
         queryParamenter = [postID];
+        console.log(queryParamenter)
       } else {
         res.status(400).send(`Invalid postID`);
         return;
@@ -44,10 +47,13 @@ router.get("/posting", async (req, res) => {
     }
 
     TransactionWraper((client) =>
-      client.query(getSqlStatement + additionalStatement + ";", queryParamenter)
+      client.query(postingsSqlStatement + additionalStatement + ";", queryParamenter)
     )
       .then((result) => {
-        if (!postID || result.rows.length === 1)
+        console.log("query: " + postingsSqlStatement + additionalStatement)
+        console.log("param: " + queryParamenter)
+        console.log(result.rows.length)
+        if (!postID || result.rows.length > 0)
           res.status(200).send(result.rows);
         else res.sendStatus(400);
       })
@@ -128,6 +134,7 @@ router.delete("/posting", async (req, res) => {
   try {
     
     let postID;
+
 
     if (/^\d+$/.test(req.body.postID)) {
       postID = BigInt(req.body.postID);
