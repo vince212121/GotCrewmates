@@ -36,9 +36,9 @@ const Header = () => {
       <header className="w-full flex flex-row bg-lightlightblue p-4 sticky">
         <Link
           to="/"
-          className="bg-header text-3xl font-bold pl-2 flex flex-row w-1/4"
+          className="home bg-header text-3xl font-bold pl-2 flex flex-row w-1/4"
         >
-          <img src="/favicon-32x32.png" alt="Pepe" />
+          <img src="/favicon-32x32.png" alt="Pepe" className="pepe-ico" />
           Got Crew Mates?
         </Link>
         <div className="ml-auto float-left">
@@ -83,6 +83,12 @@ const Header = () => {
             display: block;
             left: auto;
             right: 0;
+          }
+          .home:hover .pepe-ico {
+            animation-name: spin;
+            animation-duration: 5000ms;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
           }
         `}
       </style>
