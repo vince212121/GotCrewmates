@@ -15,7 +15,7 @@ const POSTING_TAG_POST_SQL_STATEMENT =
 
 const DELETE_SQL_STATEMENT =
   // "DELETE FROM gotcrewmates.postings WHERE postID = $1;";
-  "DELETE FROM gotcrewmates.postings WHERE postID = $1 AND userID = $2;";
+  "DELETE FROM gotcrewmates.postings WHERE postID = $1 AND postcreator = $2;";
 
 // only of they are logged in, if they are not logged in they will get a 401 for now
 // request.userid is user id
@@ -162,9 +162,14 @@ router.delete("/posting", async (req, res) => {
       res.status(400).send(`Invalid PostID`);
       return;
     }
+    console.log("user id " + userID)
+    console.log("req " + req.userID);
 
     TransactionWraper((client) => client.query(DELETE_SQL_STATEMENT, [postID, userID]))
       .then((result) => {
+        console.log('transaction worked')
+        console.log("user id " + userID)
+        console.log("req " + req.userID);
         if (result.rowCount === 1) {
           res.status(201).send("Post deleted");
         } else {
