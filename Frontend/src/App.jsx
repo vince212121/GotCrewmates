@@ -1,11 +1,10 @@
 import React, { Suspense } from "react";
 import { Switch, Route, BrowserRouter, useParams } from "react-router-dom";
 
-import { Home } from "./Home";
-import Login from "./components/Login";
-import Signup from "./components/Signup";
-import { Catalogue } from "./Catalogue";
-import { PostDetail } from "./PostDetail";
+import  { Home }  from "./components/Home";
+import { Login } from "./components/Login";
+import { Catalogue } from "./components/Catalogue";
+import { PostDetail } from "./components/PostDetail";
 
 /*
     Components to make:
