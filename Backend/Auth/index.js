@@ -59,8 +59,10 @@ router.post("/session", async (req, res) => {
       return;
     }
     const row = await GetUserRow(username);
-    if(!row)
+    if(!row){
       res.status(401);
+      return;
+    }
     const { hash, userid: userID } = row;
     const success = ComparePassword(password, hash);
     if (success) {
