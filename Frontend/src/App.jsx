@@ -1,11 +1,10 @@
 import React, { Suspense } from "react";
 import { Switch, Route, BrowserRouter, useParams } from "react-router-dom";
 
-import { Home } from "./Home";
+import Home from "./components/Home";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
-import { Catalogue } from "./Catalogue";
-import { PostDetail } from "./PostDetail";
+import Posting from "./components/Posting";
 
 /*
     Components to make:
@@ -23,9 +22,7 @@ export default function App() {
     <BrowserRouter>
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route path="/PostDetail/:id" component={PostDetail} />
-        <Route path="/Catalogue/:pagenum" component={Catalogue} />
-        {/* When user logs out, redirect to login */}
+        <Route path="/posting/:id" component={Posting} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
       </Switch>
