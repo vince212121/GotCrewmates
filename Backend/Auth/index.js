@@ -58,7 +58,10 @@ router.post("/session", async (req, res) => {
         .send(`Missing ${username && "username"} ${password && "passowrd"}`);
       return;
     }
-    const { hash, userid: userID } = await GetUserRow(username);
+    const row = await GetUserRow(username);
+    if(!row)
+      res.status(401);
+    const { hash, userid: userID } = row;
     const success = ComparePassword(password, hash);
     if (success) {
       const [accessToken, refreshToken] = CreateJWTs(userID, username);
