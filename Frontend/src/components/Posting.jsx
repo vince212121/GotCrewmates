@@ -7,22 +7,18 @@ import Cookies from "js-cookie";
 const Posting = () => {
   const history = useHistory();
   const location = useLocation();
-  console.log(location);
   const { id } = useParams();
 
   const [postingData, setPostingData] = useState({});
 
   useEffect(() => {
-    console.log("On Load");
     const token = Cookies.get("token");
-    console.log(token);
     if (token) {
       Axios.get(BASE_URL + "/api/posting", {
         params: { postID: id },
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((data) => {
-          console.log("OK");
           setPostingData(data.data[0]);
           setLoading(false);
         })
@@ -34,7 +30,7 @@ const Posting = () => {
     } else {
       history.push(`/login?redirect=${location.pathname}`);
     }
-  }, [id]);
+  }, [id, history, location.pathname]);
 
   const [loading, setLoading] = useState(true);
   return (
@@ -43,8 +39,8 @@ const Posting = () => {
         <h1>Loading...</h1>
       ) : (
         <>
-          <h1>{postingData.title}</h1>
-          <div>{postingData.postbody}</div>
+          <h1 className="text-4xl text-white mb-4 border-b-2">{postingData.title}</h1>
+          <div className="text-white border border-black rounded-xl p-4">{postingData.postbody}</div>
           <div>{postingData.creator}</div>
           <div>{postingData.numberofspots}</div>
         </>

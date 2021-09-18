@@ -1,5 +1,4 @@
 const express = require("express");
-const { Client } = require("pg");
 const { TransactionWraper } = require("../DatabaseUtil");
 
 const router = express.Router();
