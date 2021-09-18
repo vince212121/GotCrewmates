@@ -1,12 +1,9 @@
 import { Link, useHistory } from "react-router-dom";
 import { useState } from "react";
 import Axios from "axios";
+import { BASE_URL } from "../Constants";
 
-// To Do:
-//
-export const submitData = () => {};
-
-export const Login = ({ match }) => {
+const Login = () => {
   const history = useHistory();
 
   const [username, setUsername] = useState("");
@@ -17,7 +14,7 @@ export const Login = ({ match }) => {
     e.preventDefault();
     console.log(username, password);
 
-    Axios.post("http://52.170.70.22:5000/api/session", {
+    Axios.post(BASE_URL + "/api/session", {
       username: username,
       password: password,
     })
@@ -62,3 +59,5 @@ export const Login = ({ match }) => {
     </div>
   );
 };
+
+export default Login;

@@ -26,7 +26,8 @@ export default function App() {
         <Route path="/PostDetail/:id" component={PostDetail} />
         <Route path="/Catalogue/:pagenum" component={Catalogue} />
         {/* When user logs out, redirect to login */}
-        <Route path="/Login" component={Login} /> 
+        <Route path="/login" component={Login} />
+        <Route path="/signup" component={Signup} />
       </Switch>
     </BrowserRouter>
   );
