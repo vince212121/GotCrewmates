@@ -1,11 +1,11 @@
 import React, { Suspense } from "react";
 import { Switch, Route, BrowserRouter, useParams } from "react-router-dom";
 
-import  { Home }  from "./components/Home";
-import { Login } from "./components/Login";
-import { Catalogue } from "./components/Catalogue";
-import { PostDetail } from "./components/PostDetail";
-
+import  Home from "./components/Home.jsx";
+import  Login  from "./components/Login.jsx";
+import Catalogue  from "./components/Catalogue.jsx";
+import  PostDetail  from "./components/PostDetail.jsx";
+import Signup from "./components/Signup.jsx";
 /*
     Components to make:
     - Search bar
