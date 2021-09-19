@@ -47,7 +47,7 @@ const Home = () => {
               type="text"
               placeholder="Create Post"
               onClick={() => history.push("/new-posting")}
-              className="border-2 border-black  mb-4"
+              className="border-2 border-black  mb-4 p-1 rounded-md"
             />
 
             {postingData.map((post) => (
