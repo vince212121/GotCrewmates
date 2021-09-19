@@ -1,5 +1,6 @@
 const express = require("express");
 const { TransactionWraper } = require("../DatabaseUtil");
+const { AccumulateTags } = require("./util");
 const router = express.Router();
 
 const POST_SQL_STATEMENT =
@@ -21,6 +22,7 @@ router.get("/posting", async (req, res) => {
     let postingsSqlStatement =
       "SELECT u.username, p.title, p.postbody, p.status, p.numberofspots, t.tagname, p.postid, p.datecreated FROM gotcrewmates.tags t FULL OUTER JOIN gotcrewmates.postingtags pt ON t.tagid = pt.tagid FULL OUTER JOIN gotcrewmates.postings p ON p.postid = pt.postid JOIN gotcrewmates.users u ON p.postcreator = u.userid";
 
+    let searchParam = req.query.searchParameter;
     let additionalStatement = "";
     let queryParamenter = [];
 
@@ -44,6 +46,11 @@ router.get("/posting", async (req, res) => {
         res.status(400).send(`Invalid tagID`);
         return;
       }
+    } else if (searchParam) {
+      additionalStatement =
+        " WHERE lower(p.title) LIKE $1 LIMIT 20";
+      searchParam = "%" + req.query.searchParameter + "%";
+      queryParamenter = [searchParam];
     } else {
       // page number
       pageNumber = parseInt(req.query.pageNumber);
@@ -64,14 +71,17 @@ router.get("/posting", async (req, res) => {
       )
     )
       .then((result) => {
-        if (!postID || result.rows.length > 0) {
-          res.status(200).send(result.rows);
+        const rows = AccumulateTags(result.rows);
+        if (!postID || rows.length > 0) {
+          res.status(200).send(rows);
         } else res.sendStatus(400);
       })
       .catch((e) => {
+        console.log(e);
         res.sendStatus(500);
       });
   } catch (error) {
+    console.log(error);
     res.sendStatus(500);
   }
 });
@@ -128,7 +138,9 @@ router.post("/posting", async (req, res) => {
               ])
             )
           );
-          Promise.all(promises).then(() => res.sendStatus(201));
+          Promise.all(promises).then(() =>
+            res.status(201).send({ postID: postID.toString() })
+          );
         } else {
           res.sendStatus(400);
         }

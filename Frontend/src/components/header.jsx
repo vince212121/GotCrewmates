@@ -48,15 +48,18 @@ const Header = () => {
                 {username}
               </Link>
               <div className="dropdown absolute hidden pt-4 float-right">
-                <button
-                  className="bg-lightblue mr-4 mt-1 p-2 text-2xl"
-                  onClick={() => {
-                    Cookies.remove("token");
-                    setToken(undefined);
-                  }}
-                >
-                  Logout
-                </button>
+                <div className="flex flex-col">
+                  <button
+                    className="bg-lightblue mr-4 mt-1 p-2 text-2xl"
+                    onClick={() => {
+                      Cookies.remove("token");
+                      setToken(undefined);
+                    }}
+                  >
+                    Logout
+                  </button>
+                  <Link to="/new-posting">New Posting</Link>
+                </div>
               </div>
             </div>
           ) : (

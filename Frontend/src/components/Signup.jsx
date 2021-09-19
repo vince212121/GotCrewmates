@@ -52,7 +52,7 @@ const Signup = () => {
           value={passwordMatch}
         />
         {errorMessage}
-        <input type="submit" value="Submit" />
+        <input type="submit"/>
       </form>
     </>
   );
