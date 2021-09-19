@@ -12,10 +12,10 @@ const TagSearchBar = ({ tags, setTags }) => {
   const history = useHistory();
   const location = useLocation();
   let lastQuery = undefined;
-  const uniqueTags = new Set();
 
-  const [matchingTags, setMatchingTags] = useState(["apple", "orange"]);
+  const [matchingTags, setMatchingTags] = useState([]);
   const [token, setToken] = useState();
+  const [uniqueTags, setUniqueTags] = useState(new Set());
 
   useEffect(() => {
     const cookieToken = Cookies.get("token");
@@ -47,7 +47,7 @@ const TagSearchBar = ({ tags, setTags }) => {
       });
   };
 
-  const updateTags = (e,force=false) => {
+  const updateTags = (e, force = false) => {
     const text = e.target.value.toLowerCase();
     const parts = text.split(/\s+/);
     if (parts.length !== 0) getMatchingTags(parts[parts.length - 1]);
@@ -61,6 +61,7 @@ const TagSearchBar = ({ tags, setTags }) => {
             new RegExp(`${tagName}\\s*`, "i"),
             ""
           );
+          console.log(uniqueTags, uniqueTags.has(tag.tagname), tag.tagname);
           if (!uniqueTags.has(tag.tagname)) {
             uniqueTags.add(tag.tagname);
             setTags(tags.concat([tag]));
@@ -80,40 +81,41 @@ const TagSearchBar = ({ tags, setTags }) => {
       const lastTag = tags[tags.length - 1];
       uniqueTags.delete(lastTag.tagName);
       setTags(tags.slice(0, -1));
-    }else if(e.keyCode === 13){
-      updateTags(e,true);
+    } else if (e.keyCode === 13) {
+      updateTags(e, true);
     }
   };
 
   return (
-      <>
-    <div className="bg-white p-1 my-2 flex relative">
-      <div className="float-left flex flex-row gap-x-1">
-        {tags.map((tag) => (
-          <Tag name={tag.tagname} />
-        ))}
+    <>
+      <div className="bg-white my-2 flex relative rounded-lg p-1">
+        <div className="searchbar w-full">
+          <div className="relative flex items-center w-full rounded-lg focus-within:shadow-lg bg-white overflow-hidden">
+            <div className="float-left flex flex-row gap-x-1 pr-1">
+              {tags.map((tag) => (
+                <Tag name={tag.tagname} />
+              ))}
+            </div>
+            <input
+              className="h-full w-full outline-none text-md text-gray-700 py-1 pr-2 focus:outline-none"
+              onChange={updateTags}
+              onKeyDown={onKey}
+            />
+          </div>
+        </div>
+        <div className="autocomplete hidden absolute top-full left-0 rounded-md p-1 bg-text-400">
+          {matchingTags.slice(0, 5).map((tag) => (
+            <div className="p-2 border-t border-b border-text-700 hover:bg-text-700">
+              {tag.tagname}
+            </div>
+          ))}
+        </div>
       </div>
-      <input
-        name="tags"
-        onChange={updateTags}
-        onKeyDown={onKey}
-        className="searchbar p-1 flex flex-auto "
-      />
-      <div className="autocomplete hidden bg-white">
-        {matchingTags.slice(0, 5).map((tag) => (
-          <div>{tag.tagname}</div>
-        ))}
-      </div>
-    </div>
-    <style jsx>
+      <style jsx>
         {`
-          .searchbar:focus + .autocomplete {
+          .searchbar:focus-within + .autocomplete {
             display: block;
-            position: absolute;
-            top: 100%;
-            left: 0px;
           }
-
         `}
       </style>
     </>
