@@ -74,8 +74,7 @@ const TagSearchBar = ({ tags, setTags }) => {
   };
 
   const onKey = (e) => {
-    console.log(e.target.selectionStart);
-    // Backspace
+    // Backspace and front
     if (e.keyCode === 8 && e.target.selectionStart === 0) {
       if (tags.length === 0) return;
       const lastTag = tags[tags.length - 1];

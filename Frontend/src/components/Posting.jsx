@@ -1,9 +1,10 @@
 import Axios from "axios";
 import { useState, useEffect } from "react";
-import { useParams, useHistory, useLocation } from "react-router-dom";
+import { useParams, useHistory, useLocation, Link } from "react-router-dom";
 import { BASE_URL } from "../Constants";
 import Cookies from "js-cookie";
 import Loading from "./Loading";
+import Tag from "./Tag";
 
 const Posting = () => {
   const history = useHistory();
@@ -11,7 +12,7 @@ const Posting = () => {
   const { id } = useParams();
 
   const [loading, setLoading] = useState(true);
-  const [postingData, setPostingData] = useState({});
+  const [posting, setPosting] = useState({});
 
   useEffect(() => {
     const token = Cookies.get("token");
@@ -21,7 +22,7 @@ const Posting = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((data) => {
-          setPostingData(data.data[0]);
+          setPosting(data.data[0]);
           setLoading(false);
         })
         .catch((e) => {
@@ -34,21 +35,28 @@ const Posting = () => {
     }
   }, [id, history, location.pathname]);
 
-  
   return (
     <>
       {loading ? (
         <Loading />
       ) : (
         <>
-          <h1 className="text-4xl text-white mb-4 border-b-2">
-            {postingData.title}
-          </h1>
+          <Link
+            to={`/posting/${posting.postid}`}
+            className="text-4xl text-white mb-4 border-b-2"
+          >
+            {posting.title}
+          </Link>
           <div className="text-white border border-black rounded-xl p-4">
-            {postingData.postbody}
+            {posting.postbody}
+            <div className="flex flex-row gap-x-2">
+              {posting.tagname.map((tag) => (
+                <Tag name={tag} key={tag} />
+              ))}
+            </div>
           </div>
-          <div>{postingData.creator}</div>
-          <div>{postingData.numberofspots}</div>
+          <div>{posting.creator}</div>
+          <div>{posting.numberofspots}</div>
         </>
       )}
     </>

@@ -37,8 +37,8 @@ const NewPosting = () => {
       { headers: { Authorization: `Bearer ${token}` } }
     )
       .then((res) => {
-        const postID = res.data;
-        history.push(`/post/${postID}`);
+        const {postID} = res.data;
+        history.push(`/posting/${postID}`);
       })
       .catch((err) => {
         if (err.status === 401) setErrorMessage("Username already exists");
