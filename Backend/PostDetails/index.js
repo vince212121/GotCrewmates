@@ -49,6 +49,7 @@ router.get("/userlist", async (req, res) => {
 
 // POST to group table when a user joins the post
 router.post("/postdetails", async (req, res) => {
+  try {
   let postID;
   let userID;
 
@@ -109,12 +110,20 @@ router.post("/postdetails", async (req, res) => {
                 }
               })
           );
+        } else{
+          res.status(400).send("Party full");
+                    return;
         }
       } else {
+          res.status(400).send("Double posting ID")
         return;
       }
     })
   );
+  
+  }catch {
+    res.status(400).send("Something weird just happened")
+  }
 });
 
 const changeStatus = (final, people, post, postID, res) => {
