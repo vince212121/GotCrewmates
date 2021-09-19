@@ -86,7 +86,4 @@ router.post("/tags", async (req, res) => {
   }
 });
 
-// getting posts by tag
-
-
 module.exports = router;
