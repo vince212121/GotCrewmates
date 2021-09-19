@@ -95,7 +95,7 @@ router.post("/posting", async (req, res) => {
       return;
     }
 
-    if (!tags) {
+    if (!tags || !Array.isArray(tags) || !tags?.length) {
       res.status(400).send("Missing tags");
       return;
     }
