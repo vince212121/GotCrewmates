@@ -12,9 +12,11 @@ const DELETE_SQL_STATEMENT =
   "DELETE FROM gotcrewmates.postings WHERE postID = $1 AND postcreator = $2;";
 
 // Getting posts from server
+// or getting posts by tag
 router.get("/posting", async (req, res) => {
   try {
     let postID;
+    let tagID;
     let pageNumber;
     let postingsSqlStatement =
       "SELECT u.username, p.title, p.postbody, p.status, p.numberofspots, t.tagname, p.postid, p.datecreated FROM gotcrewmates.tags t FULL OUTER JOIN gotcrewmates.postingtags pt ON t.tagid = pt.tagid FULL OUTER JOIN gotcrewmates.postings p ON p.postid = pt.postid JOIN gotcrewmates.users u ON p.postcreator = u.userid";
@@ -23,21 +25,34 @@ router.get("/posting", async (req, res) => {
     let queryParamenter = [];
 
     if (req.query.postID) {
+      // filter by post
       if (/^\d+$/.test(req.query.postID)) {
         postID = BigInt(req.query.postID);
-        additionalStatement += " WHERE p.postID = $1";
+        additionalStatement += " WHERE p.postID = $1 LIMIT 20";
         queryParamenter = [postID];
       } else {
         res.status(400).send(`Invalid postID`);
         return;
       }
+    } else if (req.query.tagID) {
+      // filter by tag
+      if (/^\d+$/.test(req.query.tagID)) {
+        tagID = BigInt(req.query.tagID);
+        additionalStatement += " WHERE pt.tagID = $1 LIMIT 20";
+        queryParamenter = [tagID];
+      } else {
+        res.status(400).send(`Invalid tagID`);
+        return;
+      }
     } else {
+      // page number
       pageNumber = parseInt(req.query.pageNumber);
       if (isNaN(pageNumber) || pageNumber <= 0) {
         res.status(400).send(`Invalid page number`);
         return;
       } else if (pageNumber >= 2) {
-        additionalStatement += " OFFSET ($1 * 20) ROWS";
+        pageNumber -= 1;
+        additionalStatement += " OFFSET ($1 * 20) ROWS LIMIT 20";
         queryParamenter = [pageNumber];
       }
     }
@@ -74,23 +89,23 @@ router.post("/posting", async (req, res) => {
       return;
     }
 
-    if(!tags){
-      res.status(400).send('Missing tags');
+    if (!tags) {
+      res.status(400).send("Missing tags");
       return;
     }
 
     if (!title) {
-      res.status(400).send('Invalid title');
+      res.status(400).send("Invalid title");
       return;
     }
 
     if (!postBody) {
-      res.status(400).send('Invalid post body');
+      res.status(400).send("Invalid post body");
       return;
     }
 
     if (isNaN(numberOfSpots) || numberOfSpots <= 0) {
-      res.status(400).send('Invalid number of spots');
+      res.status(400).send("Invalid number of spots");
       return;
     }
 
@@ -107,7 +122,10 @@ router.post("/posting", async (req, res) => {
           const postID = BigInt(result.rows[0].postid);
           const promises = await TransactionWraper((client) =>
             tags.map((tag) =>
-              client.query(POSTING_TAG_POST_SQL_STATEMENT, [postID, BigInt(tag)])
+              client.query(POSTING_TAG_POST_SQL_STATEMENT, [
+                postID,
+                BigInt(tag),
+              ])
             )
           );
           Promise.all(promises).then(() => res.sendStatus(201));
