@@ -21,6 +21,7 @@ router.get("/posting", async (req, res) => {
     let postingsSqlStatement =
       "SELECT u.username, p.title, p.postbody, p.status, p.numberofspots, t.tagname, p.postid, p.datecreated FROM gotcrewmates.tags t FULL OUTER JOIN gotcrewmates.postingtags pt ON t.tagid = pt.tagid FULL OUTER JOIN gotcrewmates.postings p ON p.postid = pt.postid JOIN gotcrewmates.users u ON p.postcreator = u.userid";
 
+    let searchParam = req.query.searchParameter;
     let additionalStatement = "";
     let queryParamenter = [];
 
@@ -44,6 +45,11 @@ router.get("/posting", async (req, res) => {
         res.status(400).send(`Invalid tagID`);
         return;
       }
+    } else if (searchParam) {
+      additionalStatement =
+        " WHERE lower(p.title) LIKE $1 LIMIT 20";
+      searchParam = "%" + req.query.searchParameter + "%";
+      queryParamenter = [searchParam];
     } else {
       // page number
       pageNumber = parseInt(req.query.pageNumber);
