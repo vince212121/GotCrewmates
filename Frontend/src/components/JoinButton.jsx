@@ -22,7 +22,7 @@ const JoinButton = ({ post }) => {
 
   const onClick = (e) => {
     console.log(e);
-    setDisabled(true);
+    setDisabled(false);
     setText("Waiting...");
     Axios.post(
       BASE_URL + "/api/postdetails/",
@@ -36,11 +36,11 @@ const JoinButton = ({ post }) => {
       .then((info) => {
         setButtonData(info.data);
         setText("Joined group");
-        setDisabled(false);
+        setDisabled(true);
       })
       .catch((e) => {
         if (e.response.status === 400) {
-          setDisabled(false);
+          setDisabled(true);
         }
       });
   };
@@ -48,7 +48,7 @@ const JoinButton = ({ post }) => {
     <>
       <div>
         <button
-          className="click-change bg-btn-50 disabled:opacity-50"
+          className="click-change px-2 rounded bg-btn-50 disabled:opacity-50"
           onClick={onClick}
           disabled={disabled}
         >
