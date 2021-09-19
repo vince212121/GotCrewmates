@@ -8,7 +8,7 @@ import Posting from "./components/Posting";
 import Header from "./components/header";
 import User from "./components/User";
 import NewPosting from "./components/NewPosting";
-
+import Bar from "./components/searchBar"
 /*
     Components to make:
     - Search bar
@@ -25,6 +25,7 @@ export default function App() {
     <BrowserRouter>
       <Header />
       <div className="flex w-full justify-center">
+        <Bar component = {Bar}></Bar>
         <div className="w-1/2 p-4">
           <Switch>
             <Route exact path="/" component={Home} />

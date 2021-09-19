@@ -5,6 +5,7 @@ import { BASE_URL } from "../Constants";
 import Cookies from "js-cookie";
 import Loading from "./Loading";
 import Tag from "./Tag";
+import JoinButton from "./JoinButton";
 
 const Posting = () => {
   const history = useHistory();
@@ -55,7 +56,7 @@ const Posting = () => {
             <div className="flex flex-row gap-x-2">
               {posting.tagname.map((tag) => (
                 <Tag name={tag} key={tag} />
-              ))}
+                ))}
             </div>
           </div>
         </>
