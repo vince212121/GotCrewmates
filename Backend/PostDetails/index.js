@@ -40,11 +40,9 @@ router.get("/userlist", async (req, res) => {
         else res.sendStatus(400);
       })
       .catch((e) => {
-        console.error(e);
         res.sendStatus(500);
       });
   } catch (error) {
-    console.error(error);
     res.sendStatus(500);
   }
 });
@@ -63,6 +61,7 @@ router.post("/postdetails", async (req, res) => {
     }
   }
 
+  // Check if the user is already in the thing or not.
   if (req.body.userID) {
     if (/^\d+$/.test(req.body.userID)) {
       userID = BigInt(req.body.userID);
@@ -71,11 +70,7 @@ router.post("/postdetails", async (req, res) => {
       return;
     }
   }
-  // Check if the user is already in the thing or not.
 
-  // TODO: Check the amount of group members allowed from the postings table
-  // then check how many are currently in the group table, if less than the max amount, add the user to it
-  // Also make sure the primary key of the 2 fks are unique [postid, userid] = pk
   // Change query back to body for the post
   TransactionWraper((client) =>
     //First check if its full yet.

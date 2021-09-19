@@ -18,7 +18,7 @@ const GetUserRow = async (username) => {
     return undefined;
   }
   if (result.rows.lenght > 1) {
-    console.log(`Oh shit something went terribly wrong: ${username}`);
+    console.error(`Oh shit something went terribly wrong: ${username}`);
     return;
   }
   return result.rows[0];

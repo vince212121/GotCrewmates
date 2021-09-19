@@ -2,14 +2,6 @@ const express = require("express");
 const { TransactionWraper } = require("../DatabaseUtil");
 
 const router = express.Router();
-const CREATE_POSTING_TAGS_SQL_STATEMENT =
-"INSERT INTO gotcrewmates.postingtags (PostID, TagId) VALUES ($1, $2);"
-
-const CREATE_TAG_SQL_STATEMENT =
-"INSERT INTO gotcrewmates.tags (TagName) VALUES ($1);"
-
-const CREATE_POSTS_SQL_STATEMENT =
-"INSERT INTO gotcrewmates.postings (PostCreator, Title, PostBody, NumberofSpots) VALUES ($1, 'Title', 'Body', 10);"
 
 //Only gets active posts with the tag.
 const FIND_POSTS_SQL_STATEMENT =
@@ -20,7 +12,6 @@ router.get("/searchs", async (req, res) => {
   TransactionWraper((client) =>
     client.query(FIND_POSTS_SQL_STATEMENT, [tagname])
   ).then((posts) => {
-    console.log(posts.rows)
     if(posts.rows.length > 0) {
         //Send information.
         res.status(200).send(posts.rows)

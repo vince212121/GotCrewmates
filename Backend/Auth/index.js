@@ -38,7 +38,6 @@ router.post("/user", async (req, res) => {
           res.status(400).send("Username already exists");
           return;
         }
-        console.log(e.code);
         console.error(e);
         res.sendStatus(500);
       });

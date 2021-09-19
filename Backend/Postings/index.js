@@ -139,11 +139,9 @@ router.post("/posting", async (req, res) => {
           res.status(400).send("Invalid user");
           return;
         }
-        console.error(e);
         res.sendStatus(500);
       });
   } catch (error) {
-    console.error(error);
     res.sendStatus(500);
   }
 });
@@ -183,11 +181,9 @@ router.delete("/posting", async (req, res) => {
           res.status(400).send("Invalid postID");
           return;
         }
-        console.error(e);
         res.sendStatus(500);
       });
   } catch (error) {
-    console.error(error);
     res.sendStatus(500);
   }
 });

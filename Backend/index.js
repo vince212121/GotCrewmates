@@ -9,6 +9,7 @@ const authRouter = require("./Auth");
 const userRouter = require("./Users");
 const searchRouter = require("./Home");
 const postDetailsRouter = require("./PostDetails");
+const postRouter = require("./Postings");
 const browseRouter = require("./Tags");
 
 const PORT = process.env.PORT || 5000;
