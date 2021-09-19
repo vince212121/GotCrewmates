@@ -17,5 +17,4 @@ const AccumulateTags = (rows) => {
   return res;
 };
 
-console.log(AccumulateTags([]));
 module.exports = { AccumulateTags };
