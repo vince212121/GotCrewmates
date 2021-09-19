@@ -25,6 +25,7 @@ const NewPosting = () => {
   }, []);
 
   const handleSubmit = (e) => {
+    setErrorMessage("");
     e.preventDefault();
     Axios.post(
       BASE_URL + "/api/posting",
@@ -37,37 +38,40 @@ const NewPosting = () => {
       { headers: { Authorization: `Bearer ${token}` } }
     )
       .then((res) => {
-        const {postID} = res.data;
+        const { postID } = res.data;
         history.push(`/posting/${postID}`);
       })
       .catch((err) => {
-        if (err.status === 401) setErrorMessage("Username already exists");
-        if (err.status >= 500 && err.status < 600)
+        if (err.response.status === 400) setErrorMessage("Invalid Posting");
+        if (err.response.status >= 500 && err.status < 600)
           setErrorMessage("Internal server error");
       });
   };
 
   return (
     <>
-      <h1 className="text-2xl text-white">New Posting</h1>
+      <h1 className="text-4xl text-white font-bold border-b-2 mb-2">
+        New Posting
+      </h1>
+      <div className="text-red text-2xl">{errorMessage}</div>
       <form onSubmit={handleSubmit} className="flex flex-col">
-        <h2 className="text-1xl text-white">Title</h2>
+        <h2 className="text-2xl text-white">Title*</h2>
         <input
           name="title"
           placeholder="Title"
           value={title}
           onChange={({ target: { value } }) => setTitle(value)}
-          className="mb-2"
+          className="mb-4 p-1 rounded-md"
         />
-        <h2 className="text-1xl text-white">Post Body</h2>
+        <h2 className="text-2xl text-white">Post Body*</h2>
         <textarea
           name="postBody"
           placeholder="Post Body"
           value={body}
           onChange={({ target: { value } }) => setBody(value)}
-          className="mb-2"
+          className="mb-4 p-1 rounded-md"
         />
-        <h2 className="text-1xl text-white">Total Size of Group</h2>
+        <h2 className="text-2xl text-white rounded-md">Total Size of Group*</h2>
         <input
           name="numberOfSpots"
           value={numberOfSpots}
@@ -76,12 +80,15 @@ const NewPosting = () => {
               Math.max(parseInt(value.replace(/[^\d]/g, "") || 0), 0)
             )
           }
-          className="mb-2"
+          className="mb-4 w-1/2 p-1 rounded-md"
         />
-        <h2 className="text-1xl text-white">Tags</h2>
+        <h2 className="text-2xl text-white">Tags*</h2>
         <TagSearchBar tags={tags} setTags={setTags} />
-        {errorMessage}
-        <input className="mt-2" type="submit" />
+        <input
+          className="mt-2 py-2 w-1/3 left-auto bg-text-700 rounded-md"
+          type="submit"
+          value="Make Posting"
+        />
       </form>
     </>
   );
