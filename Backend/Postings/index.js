@@ -25,7 +25,7 @@ router.get("/posting", async (req, res) => {
     if (req.query.postID) {
       if (/^\d+$/.test(req.query.postID)) {
         postID = BigInt(req.query.postID);
-        additionalStatement += " WHERE p.postID = $1";
+        additionalStatement += " WHERE p.postID = $1 LIMIT 20";
         queryParamenter = [postID];
       } else {
         res.status(400).send(`Invalid postID`);
@@ -37,7 +37,8 @@ router.get("/posting", async (req, res) => {
         res.status(400).send(`Invalid page number`);
         return;
       } else if (pageNumber >= 2) {
-        additionalStatement += " OFFSET ($1 * 20) ROWS";
+        pageNumber -= 1;
+        additionalStatement += " OFFSET ($1 * 20) ROWS LIMIT 20";
         queryParamenter = [pageNumber];
       }
     }

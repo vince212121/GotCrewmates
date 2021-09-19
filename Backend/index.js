@@ -8,6 +8,7 @@ const JWTAuth = require("./Auth/middlewareJWT");
 const authRouter = require("./Auth");
 const userRouter = require("./Users");
 const postRouter = require("./Postings");
+const browseRouter = require("./Tags");
 
 const PORT = process.env.PORT || 5000;
 
@@ -27,6 +28,7 @@ const main = () => {
   apiLayer.use("/api", authRouter);
   apiLayer.use("/api", userRouter);
   apiLayer.use("/api", postRouter);
+  apiLayer.use("/api", browseRouter);
 
   apiLayer.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 };
