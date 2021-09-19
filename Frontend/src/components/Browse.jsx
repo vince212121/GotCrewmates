@@ -6,34 +6,37 @@ import { useHistory, useLocation, Link } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const BrowseTags = () => {
+  const history = useHistory();
+  const location = useLocation();
+
   const [expanded, setExpanded] = useState(false);
   const [tags, setTags] = useState([]);
 
   const [postings, setPostings] = useState([]);
-  const [token, setToken] = useState();
+  const [token, setToken] = useState(undefined);
 
   useEffect(() => {
     const cookieToken = Cookies.get("token");
+    if (!cookieToken) {
+      history.push(`/login?redirect=${location.pathname}`);
+    }
     setToken(cookieToken);
     // Since it is an empty bracket, it will run the first time
   }, []);
 
   useEffect(() => {
-    console.log("Run query")
-    setPostings([])
-    if(!tags) return;
+    setPostings([]);
+    if (!tags || !token) return;
     // Do something here to query postings and use setPostings to update data
     Axios.get(BASE_URL + "/api/posting", {
-      params: { tagID: tags.map((tag)=>tag.tagid)},
+      params: { tagID: tags.map((tag) => tag.tagid) },
       headers: { Authorization: `Bearer ${token}` },
     }).then((data) => {
-      console.log(data.data);
       setPostings(data.data);
     });
 
     // This will run every time the tags array changes
   }, [tags]);
-
 
   return (
     <>
@@ -49,14 +52,14 @@ const BrowseTags = () => {
             {/* Use the postings use state thing here to make them clickable in another function? */}
 
             <div className="flex flex-col">
-                {postings.map((posting) => (
-                  <Link
-                    to={`/posting/${posting.postid}`}
-                    className="text-xl text-white"
-                  >
-                    {posting.title}
-                  </Link>
-                ))}
+              {postings.map((posting) => (
+                <Link
+                  to={`/posting/${posting.postid}`}
+                  className="text-xl text-white"
+                >
+                  {posting.title}
+                </Link>
+              ))}
             </div>
           </div>
         )}

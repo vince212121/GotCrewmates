@@ -1,5 +1,5 @@
-import React, { Suspense } from "react";
-import { Switch, Route, BrowserRouter, useParams } from "react-router-dom";
+import React from "react";
+import { Switch, Route, BrowserRouter } from "react-router-dom";
 
 import Home from "./components/Home";
 import Login from "./components/Login";
