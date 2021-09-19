@@ -1,17 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Axios from "axios";
 import { BASE_URL } from "../Constants";
-import { Link } from "react-router-dom";
+import { useHistory, useLocation,Link } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const SearchBar = ({ searchs, posts }) => {
+  const history = useHistory();
+  const location = useLocation();
+
   const [searchBar, setSearchBar] = useState("");
   const [searchData, setSearchData] = useState([]);
+  const [token, setToken] = useState();
+
+  useEffect(() => {
+    const cookieToken = Cookies.get("token");
+    if (!cookieToken) {
+      history.push(`/login?redirect=${location.pathname}`);
+    }
+    setToken(cookieToken);
+  }, []);
 
   const handleSearch = async (e) => {
     e.preventDefault();
     Axios.get(BASE_URL + "/api/posting", {
-      queryParamenter: searchBar,
-    }).them((info) => setSearchData(info.data));
+     params:{queryParamenter: searchBar,
+              pageNumber : 1},
+      headers: { Authorization: `Bearer ${token}` },
+    }).then((info) => setSearchData(info.data));
   };
 
   return (
@@ -25,10 +40,10 @@ const SearchBar = ({ searchs, posts }) => {
             type="text"
             placeholder={posts}
           />
-          <div className="Results">
+          <div className="Results flex flex-col">
             {searchData.map((posting) => {
               return (
-                <Link to={BASE_URL + "/posting/" + posting.postID}>
+                <Link to={`/posting/${posting.postid}`}>
                   {posting.title}
                 </Link>
               );
