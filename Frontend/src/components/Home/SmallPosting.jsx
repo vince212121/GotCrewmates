@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Tag from "../Tag";
+import JoinButton from "../JoinButton";
 
 const SmallPosting = ({ posting }) => {
   console.log(posting);
@@ -21,6 +22,9 @@ const SmallPosting = ({ posting }) => {
             {posting.tagname.map((tag) => (
               <Tag name={tag} key={tag} />
             ))}
+          </div>
+          <div className="mt-2">
+            <JoinButton post={posting} />
           </div>
         </div>
       </div>
