@@ -49,23 +49,25 @@ const NewPosting = () => {
 
   return (
     <>
-      <h1>New Posting</h1>
+      <h1 className="text-2xl text-white">New Posting</h1>
       <form onSubmit={handleSubmit} className="flex flex-col">
-        <h2>Title</h2>
+        <h2 className="text-1xl text-white">Title</h2>
         <input
           name="title"
           placeholder="Title"
           value={title}
           onChange={({ target: { value } }) => setTitle(value)}
+          className="mb-2"
         />
-        <h2>Post Body</h2>
+        <h2 className="text-1xl text-white">Post Body</h2>
         <textarea
           name="postBody"
           placeholder="Post Body"
           value={body}
           onChange={({ target: { value } }) => setBody(value)}
+          className="mb-2"
         />
-        <h2>Total Size of Group</h2>
+        <h2 className="text-1xl text-white">Total Size of Group</h2>
         <input
           name="numberOfSpots"
           value={numberOfSpots}
@@ -74,10 +76,12 @@ const NewPosting = () => {
               Math.max(parseInt(value.replace(/[^\d]/g, "") || 0), 0)
             )
           }
+          className="mb-2"
         />
+        <h2 className="text-1xl text-white">Tags</h2>
         <TagSearchBar tags={tags} setTags={setTags} />
         {errorMessage}
-        <input type="submit" />
+        <input className="mt-2" type="submit" />
       </form>
     </>
   );

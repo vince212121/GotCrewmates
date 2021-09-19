@@ -47,16 +47,17 @@ const Posting = () => {
           >
             {posting.title}
           </Link>
-          <div className="text-white border border-black rounded-xl p-4">
-            {posting.postbody}
+          <div className="text-white border border-black rounded-xl mt-4 px-4 py-2 mb-8">
+            <div className="text-2xl">{posting.postbody}</div>
+
+            <div>Number of Spots: {posting.numberofspots}</div>
+            <div>Posted by: {posting.username}</div>
             <div className="flex flex-row gap-x-2">
               {posting.tagname.map((tag) => (
                 <Tag name={tag} key={tag} />
               ))}
             </div>
           </div>
-          <div>{posting.creator}</div>
-          <div>{posting.numberofspots}</div>
         </>
       )}
     </>
