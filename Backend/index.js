@@ -11,6 +11,9 @@ const userRouter = require("./Users");
 
 const postRouter = require("./Postings");
 
+const searchRouter = require("./Home");
+
+const postDetailsRouter = require("./PostDetails");
 
 const PORT = process.env.PORT || 5000;
 
@@ -31,8 +34,11 @@ const main = () => {
 
   apiLayer.use("/api", userRouter);
   
-
+  apiLayer.use("/api", searchRouter);
+  
   apiLayer.use("/api", postRouter);
+
+  apiLayer.use("/api", postDetailsRouter)
 
 
   apiLayer.listen(PORT, () => console.log(`Listening on port ${PORT}`));
