@@ -15,7 +15,6 @@ const User = () => {
     Axios.get(BASE_URL + "/api/user", {
       params: { username: username },
     }).then((data) => {
-      console.log(data.data);
       setUserData(data.data);
       setLoading(false);
     });
