@@ -43,11 +43,15 @@ const Home = () => {
       ) : (
         <>
           <div>
+            <input
+              type="text"
+              placeholder="Create Post"
+              onClick = {()=>history.push("/new-posting")}
+            />
             {postingData.map((post) => (
               <SmallPosting posting={post} />
             ))}
           </div>
-          
         </>
       )}
     </>
