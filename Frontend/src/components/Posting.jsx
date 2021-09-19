@@ -56,7 +56,10 @@ const Posting = () => {
             <div className="flex flex-row gap-x-2">
               {posting.tagname.map((tag) => (
                 <Tag name={tag} key={tag} />
-                ))}
+              ))}
+            </div>
+            <div className="mt-2">
+              <JoinButton post = {posting} />
             </div>
           </div>
         </>
