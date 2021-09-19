@@ -61,6 +61,7 @@ const Header = () => {
                       onClick={() => {
                         Cookies.remove("token");
                         setToken(undefined);
+                        history.push(`/login`);
                       }}
                     >
                       Logout
