@@ -1,7 +1,7 @@
 const AccumulateTags = (rows) => {
+  if (!rows || rows.length === 0 ) return rows;
   rows = rows.map((row) => ({ ...row, tagname: [row.tagname] }));
   const res = [];
-  if (!rows) return rows;
   res.push(rows[0]);
   for (let idx = 1; idx < rows.length; idx++) {
     const row = rows[idx];
