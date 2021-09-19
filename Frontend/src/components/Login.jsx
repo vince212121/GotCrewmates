@@ -40,7 +40,7 @@ const Login = () => {
 
   return (
     <div className="w-full items-center bg-gray-400">
-      <h1 className="text-4xl">This is the Log in page.</h1>
+      <h1 className="text-2xl text-white mb-3">Login</h1>
       <form
         className=" object-center bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
         onSubmit={handleSubmit}
@@ -52,6 +52,7 @@ const Login = () => {
             name="username"
             onChange={({ target: { value } }) => setUsername(value)}
             value={username}
+            className="mb-3"
           />
           <input
             type="password"
@@ -59,6 +60,7 @@ const Login = () => {
             name="password"
             onChange={({ target: { value } }) => setPassword(value)}
             value={password}
+            className="mb-3"
           />
           {errorMessage}
           <input type="submit" value="Submit" />

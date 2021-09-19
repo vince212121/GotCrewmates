@@ -30,29 +30,36 @@ const Signup = () => {
 
   return (
     <>
-      <h1>Signup</h1>
-      <form onSubmit={handleSubmit}>
+      <h1 className="text-2xl text-white mb-3">Signup</h1>
+      <form className=" object-center bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
+        <div className="flex flex-col">
         <input
           type="text"
           placeholder="Username"
           name="username"
           onChange={({ target: { value } }) => setUsername(value)}
           value={username}
+          className="mb-2"
         />
         <input
           type="password"
+          placeholder="password"
           name="password"
           onChange={({ target: { value } }) => setPassword(value)}
           value={password}
+          className="mb-2"
         />
         <input
           type="password"
+          placeholder="re-enter password"
           name="passwordMatch"
           onChange={({ target: { value } }) => setPasswordMatch(value)}
           value={passwordMatch}
+          className="mb-2"
         />
         {errorMessage}
         <input type="submit"/>
+        </div>
       </form>
     </>
   );

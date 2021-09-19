@@ -42,12 +42,14 @@ const Home = () => {
         <Loading />
       ) : (
         <>
-          <div>
+          <div className="flex flex-col">
             <input
               type="text"
               placeholder="Create Post"
-              onClick = {()=>history.push("/new-posting")}
+              onClick={() => history.push("/new-posting")}
+              className="border-2 border-black  mb-4"
             />
+
             {postingData.map((post) => (
               <SmallPosting posting={post} />
             ))}
