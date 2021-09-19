@@ -47,18 +47,18 @@ const TagSearchBar = ({ tags, setTags }) => {
       });
   };
 
-  const updateTags = (e) => {
+  const updateTags = (e,force=false) => {
     const text = e.target.value.toLowerCase();
     const parts = text.split(/\s+/);
     if (parts.length !== 0) getMatchingTags(parts[parts.length - 1]);
-    if (!text.match(/\s+$/)) return;
+    if (!force && !text.match(/\s+$/)) return;
     let resultingString = e.target.value;
     parts.forEach((value) =>
       matchingTags.forEach((tag) => {
         const tagName = tag.tagname.toLowerCase();
         if (tagName === value) {
           resultingString = resultingString.replace(
-            new RegExp(`${tagName}\\s+`, "i"),
+            new RegExp(`${tagName}\\s*`, "i"),
             ""
           );
           if (!uniqueTags.has(tag.tagname)) {
@@ -80,6 +80,8 @@ const TagSearchBar = ({ tags, setTags }) => {
       const lastTag = tags[tags.length - 1];
       uniqueTags.delete(lastTag.tagName);
       setTags(tags.slice(0, -1));
+    }else if(e.keyCode === 13){
+      updateTags(e,true);
     }
   };
 
