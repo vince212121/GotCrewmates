@@ -44,18 +44,18 @@ const Header = () => {
   );
 
   const UnAuthedComponent = () => (
-    <>
+    <div className="h-full flex rounded-t-xlflex-row items-center">
       <Link to="/login" className="text-2xl mr-4 p-1 bg-lightblue rounded-lg">
         Login
       </Link>
       <Link to="/signup" className="text-2xl mr-4 p-1 bg-lightblue rounded-lg">
         Sign Up
       </Link>
-    </>
+    </div>
   );
 
   const AuthedComponent = () => (
-    <div className="h-full flex-1 flex flex-row items-center mx-16">
+    <div className="h-full flex flex-row items-center mx-16">
       <BrowseTags />
       <div className="profile h-full flex items-center">
         <Link to={`/user/${username}`} className="text-2xl mx-4 p-1">
@@ -63,6 +63,9 @@ const Header = () => {
         </Link>
         <div className="dropdown absolute hidden top-full right-16">
           <div className="flex flex-col">
+            <Link to="/new-posting" className="bg-lightblue p-2 text-2xl">
+              New Posting
+            </Link>
             <button
               className="bg-lightblue p-2 text-2xl border-b-2 border-lightlightblue"
               onClick={() => {
@@ -72,9 +75,6 @@ const Header = () => {
             >
               Logout
             </button>
-            <Link to="/new-posting" className="bg-lightblue p-2 text-2xl">
-              New Posting
-            </Link>
           </div>
         </div>
       </div>
