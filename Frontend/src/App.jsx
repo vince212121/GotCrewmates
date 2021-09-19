@@ -7,6 +7,7 @@ import Signup from "./components/Signup";
 import Posting from "./components/Posting";
 import Header from "./components/header";
 import User from "./components/User";
+import NewPosting from "./components/NewPosting";
 
 /*
     Components to make:
@@ -27,9 +28,10 @@ export default function App() {
         <div className="w-1/2 p-4">
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route path="/posting/:id" component={Posting} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
+            <Route path="/new-posting" component={NewPosting} />
+            <Route path="/posting/:id" component={Posting} />
             <Route path="/user/:username" component={User} />
           </Switch>
         </div>

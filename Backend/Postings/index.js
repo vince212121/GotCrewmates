@@ -128,7 +128,7 @@ router.post("/posting", async (req, res) => {
               ])
             )
           );
-          Promise.all(promises).then(() => res.sendStatus(201));
+          Promise.all(promises).then(() => res.status(201).send(postID.toString()));
         } else {
           res.sendStatus(400);
         }
