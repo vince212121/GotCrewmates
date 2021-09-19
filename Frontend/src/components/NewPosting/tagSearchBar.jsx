@@ -61,7 +61,6 @@ const TagSearchBar = ({ tags, setTags }) => {
             new RegExp(`${tagName}\\s*`, "i"),
             ""
           );
-          console.log(uniqueTags, uniqueTags.has(tag.tagname), tag.tagname);
           if (!uniqueTags.has(tag.tagname)) {
             uniqueTags.add(tag.tagname);
             setTags(tags.concat([tag]));
@@ -79,7 +78,7 @@ const TagSearchBar = ({ tags, setTags }) => {
     if (e.keyCode === 8 && e.target.selectionStart === 0) {
       if (tags.length === 0) return;
       const lastTag = tags[tags.length - 1];
-      uniqueTags.delete(lastTag.tagName);
+      uniqueTags.delete(lastTag.tagname);
       setTags(tags.slice(0, -1));
     } else if (e.keyCode === 13) {
       updateTags(e, true);
@@ -100,16 +99,19 @@ const TagSearchBar = ({ tags, setTags }) => {
               className="h-full w-full outline-none text-md text-gray-700 py-1 pr-2 focus:outline-none"
               onChange={updateTags}
               onKeyDown={onKey}
+              placeholder="Search Tags"
             />
           </div>
         </div>
-        <div className="autocomplete hidden absolute top-full left-0 rounded-md p-1 bg-text-400">
-          {matchingTags.slice(0, 5).map((tag) => (
-            <div className="p-2 border-t border-b border-text-700 hover:bg-text-700">
-              {tag.tagname}
-            </div>
-          ))}
-        </div>
+        {matchingTags.length !== 0 && (
+          <div className="autocomplete hidden absolute top-full left-0 rounded-md p-1 bg-text-400">
+            {matchingTags.slice(0, 5).map((tag) => (
+              <div className="p-2 border-t border-b border-text-700 hover:bg-text-700">
+                {tag.tagname}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <style jsx>
         {`
