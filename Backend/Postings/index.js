@@ -1,5 +1,6 @@
 const express = require("express");
 const { TransactionWraper } = require("../DatabaseUtil");
+const { AccumulateTags } = require("./util");
 const router = express.Router();
 
 const POST_SQL_STATEMENT =
@@ -64,14 +65,17 @@ router.get("/posting", async (req, res) => {
       )
     )
       .then((result) => {
-        if (!postID || result.rows.length > 0) {
-          res.status(200).send(result.rows);
+        const rows = AccumulateTags(result.rows);
+        if (!postID || rows.length > 0) {
+          res.status(200).send(rows);
         } else res.sendStatus(400);
       })
       .catch((e) => {
+        console.log(e);
         res.sendStatus(500);
       });
   } catch (error) {
+    console.log(error);
     res.sendStatus(500);
   }
 });
@@ -128,7 +132,9 @@ router.post("/posting", async (req, res) => {
               ])
             )
           );
-          Promise.all(promises).then(() => res.status(201).send(postID.toString()));
+          Promise.all(promises).then(() =>
+            res.status(201).send({ postID: postID.toString() })
+          );
         } else {
           res.sendStatus(400);
         }
